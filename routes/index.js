@@ -7,14 +7,16 @@ const schema = require('./../schema')
 // const buildDataloaders = require('./../dataloaders');
 const formatError = require('./../formatError');
 const mongo = require('./../configs/db.config')
+const JWT_SECRET = process.env.JWT_SECRET
 
 const buildOptions = async (req, res) => {
     // const user = await authenticate(req, mongo.Users);
     // console.log(user)
     return {
         context: {
+            JWT_SECRET,
+            user: req.user
             // dataloaders: buildDataloaders(),
-            // user
         }, // This context object is passed to all resolvers.
         formatError,
         schema,

@@ -1,4 +1,5 @@
 const UserResolver = require('./user.resolver')
+const { requiresAuth, requiresAdmin } = require('./../auth/permissions')
 
 const prepare = (object) => {
     object._id = object._id.toString()
@@ -7,17 +8,16 @@ const prepare = (object) => {
 
 const resolvers = {
     Query: {
-        getUsers: (root, data) => {
+        getUsers: requiresAuth.createResolver(async (root, data, context) => {
             return UserResolver.getUsers()
-                .then(users => users)
-                .catch(error => error)
-        }
+        })
     },
     Mutation: {
-        signup: (root, data) => {
-            return UserResolver.signup(data.newUser)
-                .then(user => user)
-                .catch(error => error)
+        register: async (root, data, context) => {
+            return await UserResolver.register(data)
+        },
+        login: async (root, data, context) => {
+            return await UserResolver.login(data, { JWT_SECRET })
         }
     },
 };

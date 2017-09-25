@@ -4,6 +4,7 @@ const logger = require('morgan')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const routes = require('./routes')
+const adduser = require('./auth/adduser')
 
 require('./configs/db.config')
 const corsConfig = require('./configs/cors.config')
@@ -17,6 +18,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: false
 }))
+
+app.use(adduser)
 
 app.use('/', routes)
 
