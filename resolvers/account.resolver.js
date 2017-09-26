@@ -1,18 +1,6 @@
-const AccountResolver = require('./account.resolver')
+const mongoose = require('mongoose')
+const User = require('./../models/user.model')
 
-const prepare = (object) => {
-    object._id = object._id.toString()
-    return object
+module.exports.owner = (owner) => {
+    return User.findById(owner)
 }
-
-const resolvers = {
-    Mutation: {
-        createAccount: (root, data) => {
-            return AccountResolver.create(data.newAccount)
-                .then(account => account)
-                .catch(error => error)
-        }
-    },
-};
-
-module.exports = resolvers;

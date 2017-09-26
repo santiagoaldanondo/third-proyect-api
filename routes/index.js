@@ -11,7 +11,6 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 const buildOptions = async (req, res) => {
     // const user = await authenticate(req, mongo.Users);
-    // console.log(user)
     return {
         context: {
             JWT_SECRET,

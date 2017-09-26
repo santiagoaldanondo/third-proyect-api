@@ -1,15 +1,15 @@
 const jsonwebtoken = require('jsonwebtoken')
 const JWT_SECRET = process.env.JWT_SECRET
 
-const addUser = async (req, res, next) => {
+const authorization = async (req, res, next) => {
     const token = req.headers.authorization
     try {
-        const { user } = await jsonwebtoken.verify(token)
+        const { user } = await jsonwebtoken.verify(token, JWT_SECRET)
         req.user = user
     } catch (err) {
-        console.log(err)
+        console.log("jwt not verified")
     }
     next()
 }
 
-module.exports = addUser
+module.exports = authorization

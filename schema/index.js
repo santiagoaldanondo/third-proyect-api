@@ -1,14 +1,18 @@
 const graphqlTools = require('graphql-tools')
 const userSchema = require('./user.schema')
+const accountSchema = require('./account.schema')
 const resolvers = require('./../resolvers')
 
 const typeDefs = `
-${userSchema.type}
+  ${userSchema.type}
+  ${accountSchema.type}
 type Query {
-${userSchema.query}
+  ${userSchema.query}
+  ${accountSchema.query}
 }
 type Mutation {
-${userSchema.mutation}  
+  ${userSchema.mutation}  
+  ${accountSchema.mutation}  
 }
 `;
 

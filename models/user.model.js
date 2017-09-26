@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt')
 const SALT_WORK_FACTOR = 10;
+const uniqueValidator = require('mongoose-unique-validator');
+
 
 const UserSchema = Schema({
     firstName: {
@@ -14,7 +16,8 @@ const UserSchema = Schema({
     },
     email: {
         type: String,
-        required: [true, "Email is required"]
+        required: [true, "Email is required"],
+        unique: true
     },
     password: {
         type: String,
@@ -47,6 +50,8 @@ UserSchema.pre('save', function save(next) {
         }
     })
 });
+
+UserSchema.plugin(uniqueValidator);
 
 UserSchema.methods.checkPassword = function (password) {
     return bcrypt.compare(password, this.password);

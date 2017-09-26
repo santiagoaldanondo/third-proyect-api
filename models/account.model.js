@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const AccountSchema = Schema({
-    name: {
+    description: {
         type: String,
-        required: [true, "Name is required"]
+        required: [true, "A description is required"]
     },
     owner: {
         type: Schema.Types.ObjectId,
