@@ -11,13 +11,13 @@ const createResolver = (resolver) => {
 }
 
 const requiresAuth = createResolver((root, args, context) => {
-    if (!context.user || !context.user.id) {
+    if (!context.authUser || !context.authUser.id) {
         throw new Error('Not authenticated')
     }
 })
 
 const requiresAccount = requiresAuth.createResolver((root, args, context) => {
-    if (context.user.account !== args.account) {
+    if (context.authUser.account !== args.account) {
         throw new Error('You need permissions to access this account')
     }
 })

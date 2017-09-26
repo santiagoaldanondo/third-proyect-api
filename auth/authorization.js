@@ -4,8 +4,8 @@ const JWT_SECRET = process.env.JWT_SECRET
 const authorization = async (req, res, next) => {
     const token = req.headers.authorization
     try {
-        const { user } = await jsonwebtoken.verify(token, JWT_SECRET)
-        req.user = user
+        const { authUser } = await jsonwebtoken.verify(token, JWT_SECRET)
+        req.authUser = authUser
     } catch (err) {
         console.log("jwt not verified")
     }

@@ -4,12 +4,16 @@ const Account = require('./../models/account.model')
 const jsonwebtoken = require('jsonwebtoken')
 const _ = require('lodash')
 
-module.exports.account = (account) => {
-    return Account.findById(account)
+module.exports.owner = (owner) => {
+    return User.findById(owner)
 }
 
-module.exports.getUsers = (user) => {
-    return User.find({ account: user.account })
+module.exports.user = (user) => {
+    return User.findById(user)
+}
+
+module.exports.getUsers = (authUser) => {
+    return User.find({ account: authUser.account })
 }
 
 module.exports.register = async (data) => {
@@ -33,7 +37,7 @@ module.exports.login = async (data, JWT_SECRET) => {
         } else {
             const token = jsonwebtoken.sign(
                 {
-                    user: _.pick(user, ['_id', 'account'])
+                    authUser: _.pick(user, ['_id', 'account'])
                 },
                 JWT_SECRET
                 , {
@@ -45,14 +49,13 @@ module.exports.login = async (data, JWT_SECRET) => {
     }
 }
 
-module.exports.addToAccount = async (data, user) => {
-    data.account = user.account
-    return await User.create(data)
+module.exports.addToAccount = (data, authUser) => {
+    data.account = authUser.account
+    return User.create(data)
 }
 
-module.exports.resetPassword = async (data, user) => {
-    // console.log(user)
-    const dbUser = await User.findById(user._id)
+module.exports.resetPassword = async (data, authUser) => {
+    const dbUser = await User.findById(authUser._id)
     const passwordOk = await dbUser.checkPassword(data.oldPassword)
     if (!passwordOk) {
         throw new Error("Old password is not correct")

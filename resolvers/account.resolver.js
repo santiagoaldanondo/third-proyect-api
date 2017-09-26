@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const User = require('./../models/user.model')
+const Account = require('./../models/account.model')
 
-module.exports.owner = (owner) => {
-    return User.findById(owner)
+module.exports.account = (account) => {
+    return Account.findById(account)
 }

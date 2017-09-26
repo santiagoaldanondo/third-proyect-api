@@ -1,6 +1,6 @@
 module.exports.type = `
 type Account {
-    _id: String
+    _id: ID
     owner: User!
     description: String!
 }

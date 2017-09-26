@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const uniqueValidator = require('mongoose-unique-validator');
 
 const ClientSchema = Schema({
     firstName: {
@@ -14,7 +15,8 @@ const ClientSchema = Schema({
         type: String
     },
     phone: {
-        type: String
+        type: String,
+        unique: true
     },
     insuranceNumber: {
         type: String
@@ -31,6 +33,8 @@ const ClientSchema = Schema({
 }, {
         timestamps: true
     });
+
+ClientSchema.plugin(uniqueValidator);
 
 const Client = mongoose.model("Client", ClientSchema);
 module.exports = Client;
