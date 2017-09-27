@@ -12,6 +12,6 @@ module.exports.query = `
     getPricings: [Pricing]
 `
 module.exports.mutation = `
-    createPricing(price: Float!, service: ID!, insurance: ID!, account: ID!): Pricing
-    updatePricing(_id: ID!, price: Float!, service: ID!, insurance: ID!, account: ID!): Pricing
+    createPricing(price: Float!, service: ID!, insurance: ID!): Pricing
+    updatePricing(_id: ID!, price: Float!, service: ID!, insurance: ID!): Pricing
 `

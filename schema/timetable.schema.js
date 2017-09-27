@@ -16,7 +16,7 @@ module.exports.query = `
 `
 module.exports.mutation = `
     createTimetable(date: Date!, notes: String, info: String, client: ID,
-        service: ID, user: ID, account: ID): Timetable
+        service: ID, user: ID): Timetable
     updateTimetable(_id: ID!, date: Date!, notes: String, info: String, client: ID,
-        service: ID, user: ID, account: ID): Timetable
+        service: ID, user: ID): Timetable
 `

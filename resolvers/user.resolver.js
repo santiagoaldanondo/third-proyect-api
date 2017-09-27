@@ -44,6 +44,7 @@ module.exports.login = async (data, JWT_SECRET) => {
                     expiresIn: '1d'
                 }
             )
+            console.log(token)
             return token
         }
     }
