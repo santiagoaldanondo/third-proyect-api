@@ -29,7 +29,7 @@ A user needs to be able to:
 
 
 ## Main technologies used
-
+- Function composition for authorization with library compose-function
 
 ## Installation instructions
 
