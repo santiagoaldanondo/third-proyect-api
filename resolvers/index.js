@@ -66,10 +66,10 @@ const resolvers = {
         getPricings: compose(requiresAuth)(
             async (root, data, { authUser }) => await PricingR.getPricings(authUser)),
         getUsers: compose(requiresAuth)(
-            async (root, data, { authUser }) => await UserR.getUsers(authUser)) 
+            async (root, data, { authUser }) => await UserR.getUsers(authUser))
     },
     Mutation: {
-        register: async (root, data, context) => await UserR.register(data),
+        register: async (root, data, { JWT_SECRET }) => await UserR.register(data, JWT_SECRET),
         login: async (root, data, { JWT_SECRET }) => await UserR.login(data, JWT_SECRET),
         addToaccount: compose(requiresAuth)(
             async (root, data, { authUser }) => await UserR.addToAccount(data, authUser)),

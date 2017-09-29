@@ -16,13 +16,26 @@ module.exports.getUsers = (authUser) => {
     return User.find({ account: authUser.account })
 }
 
-module.exports.register = async (data) => {
+module.exports.register = async (data, JWT_SECRET) => {
+    let token = null
     const newUser = await User.create(_.pick(data, ['firstName', 'lastName', 'email', 'password']))
     data.owner = newUser._id
     const newAccount = await Account.create(_.pick(data, ['description', 'owner']))
     newUser.account = newAccount._id
-    return User.findByIdAndUpdate(newUser._id, newUser, { new: true })
-
+    await User.findByIdAndUpdate(newUser._id, newUser, { new: true })
+        .then(user => {
+            token = jsonwebtoken.sign(
+                {
+                    authUser: _.pick(user, ['_id', 'account'])
+                },
+                JWT_SECRET
+                , {
+                    expiresIn: '1d'
+                }
+            )
+        }).catch(err => console.log(err))
+    console.log(token)
+    return token
 }
 
 module.exports.login = async (data, JWT_SECRET) => {
@@ -45,7 +58,6 @@ module.exports.login = async (data, JWT_SECRET) => {
                 }
             )
             return token
-            console.log(token)
         }
     }
 }

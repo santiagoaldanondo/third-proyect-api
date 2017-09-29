@@ -13,7 +13,7 @@ module.exports.query = `
 `
 module.exports.mutation = `
     register(firstName: String!, lastName: String! email: String!, password: String!,
-        description: String!): User
+        description: String!): String
     login(email: String!, password: String!): String
     addToaccount(firstName: String!, lastName: String! email: String!, password: String!): User
     resetPassword(oldPassword: String!, newPassword: String!): User
