@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ServiceSchema = Schema({
+const TreatmentSchema = Schema({
     branch: {
         type: String,
     },
@@ -20,5 +20,5 @@ const ServiceSchema = Schema({
         timestamps: true
     });
 
-const Service = mongoose.model("Service", ServiceSchema);
-module.exports = Service;
+const Treatment = mongoose.model("Treatment", TreatmentSchema);
+module.exports = Treatment;

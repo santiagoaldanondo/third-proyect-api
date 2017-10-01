@@ -9,13 +9,13 @@ module.exports.getInsurances = (authUser) => {
     return Insurance.find({ account: authUser.account })
 }
 
-module.exports.createInsurance = (data, user) => {
-    data.account = user.account
+module.exports.createInsurance = (data, authUser) => {
+    data.account = authUser.account
     return Insurance.create(data)
 }
 
-module.exports.updateInsurance = (data, user) => {
-    data.account = user.account
+module.exports.updateInsurance = (data, authUser) => {
+    data.account = authUser.account
     return Insurance.findByIdAndUpdate(data._id, data, { new: true })
 }
 

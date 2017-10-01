@@ -9,15 +9,15 @@ module.exports.getClients = (authUser) => {
     return Client.find({ account: authUser.account })
 }
 
-module.exports.createClient = async (data, user) => {
+module.exports.createClient = async (data, authUser) => {
     // Missing verification that insurance corresponds to the same account
-    data.account = user.account
+    data.account = authUser.account
     return Client.create(data)
 }
 
-module.exports.updateClient = async (data, user) => {
+module.exports.updateClient = async (data, authUser) => {
     // Missing verification that insurance corresponds to the same account
-    data.account = user.account
+    data.account = authUser.account
     return Client.findByIdAndUpdate(data._id, data, { new: true })
 }
 

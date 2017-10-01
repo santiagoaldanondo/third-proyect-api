@@ -26,7 +26,7 @@ module.exports.register = async (data, JWT_SECRET) => {
         .then(user => {
             token = jsonwebtoken.sign(
                 {
-                    authUser: _.pick(user, ['_id', 'account'])
+                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'account'])
                 },
                 JWT_SECRET
                 , {
@@ -34,7 +34,6 @@ module.exports.register = async (data, JWT_SECRET) => {
                 }
             )
         }).catch(err => console.log(err))
-    console.log(token)
     return token
 }
 
@@ -50,7 +49,7 @@ module.exports.login = async (data, JWT_SECRET) => {
         } else {
             const token = jsonwebtoken.sign(
                 {
-                    authUser: _.pick(user, ['_id', 'account'])
+                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'account'])
                 },
                 JWT_SECRET
                 , {
@@ -76,4 +75,12 @@ module.exports.resetPassword = async (data, authUser) => {
         dbUser.password = data.newPassword
         return dbUser.save()
     }
+}
+
+module.exports.updateUser = async (data, authUser) => {
+    if (data._id === authUser._id) {
+        return User.findByIdAndUpdate(authUser._id, data, { new: true })
+        }
+    throw new Error("You cannot modify a different user")
+
 }

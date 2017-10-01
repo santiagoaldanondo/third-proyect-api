@@ -9,15 +9,15 @@ module.exports.getTimetables = (authUser) => {
     return Timetable.find({ account: authUser.account })
 }
 
-module.exports.createTimetable = async (data, user) => {
-    // Missing verification that client, service and user correspond to the same account
-    data.account = user.account
+module.exports.createTimetable = async (data, authUser) => {
+    // Missing verification that client, treatment and authUser correspond to the same account
+    data.account = authUser.account
     return Timetable.create(data)
 }
 
-module.exports.updateTimetable = async (data, user) => {
-    // Missing verification that client, service and user correspond to the same account
-    data.account = user.account
+module.exports.updateTimetable = async (data, authUser) => {
+    // Missing verification that client, treatment and authUser correspond to the same account
+    data.account = authUser.account
     return Timetable.findByIdAndUpdate(data._id, data, { new: true })
 }
 

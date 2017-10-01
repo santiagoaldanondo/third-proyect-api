@@ -10,9 +10,9 @@ const TimetableSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: "Client"
     },
-    service: {
+    treatment: {
         type: Schema.Types.ObjectId,
-        ref: "Service"
+        ref: "Treatment"
     },
     user: {
         type: Schema.Types.ObjectId,

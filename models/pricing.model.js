@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PricingSchema = Schema({
-    service: {
+    treatment: {
         type: Schema.Types.ObjectId,
-        ref: "Service",
-        required: [true, "A service is required"]
+        ref: "Treatment",
+        required: [true, "A treatment is required"]
     },
     insurance: {
         type: Schema.Types.ObjectId,

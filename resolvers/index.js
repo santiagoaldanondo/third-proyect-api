@@ -5,7 +5,7 @@ const AccountR = require('./account.resolver')
 const ClientR = require('./client.resolver')
 const InsuranceR = require('./insurance.resolver')
 const PricingR = require('./pricing.resolver')
-const ServiceR = require('./service.resolver')
+const TreatmentR = require('./treatment.resolver')
 const TimetableR = require('./timetable.resolver')
 const UserR = require('./user.resolver')
 const requiresAuth = require('./../auth/permissions')
@@ -40,14 +40,14 @@ const resolvers = {
     Pricing: {
         account: async ({ account }) => await AccountR.account(account),
         insurance: async ({ insurance }) => await InsuranceR.insurance(insurance),
-        service: async ({ service }) => await ServiceR.service(service)
+        treatment: async ({ treatment }) => await TreatmentR.treatment(treatment)
     },
-    Service: {
+    Treatment: {
         account: async ({ account }) => await AccountR.account(account)
     },
     Timetable: {
         account: async ({ account }) => await AccountR.account(account),
-        service: async ({ service }) => await ServiceR.service(service),
+        treatment: async ({ treatment }) => await TreatmentR.treatment(treatment),
         client: async ({ client }) => await ClientR.client(client),
         user: async ({ user }) => await UserR.user(user)
     },
@@ -59,8 +59,8 @@ const resolvers = {
             async (root, data, { authUser }) => await ClientR.getClients(authUser)),
         getInsurances: compose(requiresAuth)(
             async (root, data, { authUser }) => await InsuranceR.getInsurances(authUser)),
-        getServices: compose(requiresAuth)(
-            async (root, data, { authUser }) => await ServiceR.getServices(authUser)),
+        getTreatments: compose(requiresAuth)(
+            async (root, data, { authUser }) => await TreatmentR.getTreatments(authUser)),
         getTimetables: compose(requiresAuth)(
             async (root, data, { authUser }) => await TimetableR.getTimetables(authUser)),
         getPricings: compose(requiresAuth)(
@@ -75,6 +75,8 @@ const resolvers = {
             async (root, data, { authUser }) => await UserR.addToAccount(data, authUser)),
         resetPassword: compose(requiresAuth)(
             async (root, data, { authUser }) => await UserR.resetPassword(data, authUser)),
+        updateUser: compose(requiresAuth)(
+            async (root, data, { authUser }) => await UserR.updateUser(data, authUser)),
         createClient: compose(requiresAuth)(
             async (root, data, { authUser }) => await ClientR.createClient(data, authUser)),
         updateClient: compose(requiresAuth)(
@@ -83,10 +85,10 @@ const resolvers = {
             async (root, data, { authUser }) => await InsuranceR.createInsurance(data, authUser)),
         updateInsurance: compose(requiresAuth)(
             async (root, data, { authUser }) => await InsuranceR.updateInsurance(data, authUser)),
-        createService: compose(requiresAuth)(
-            async (root, data, { authUser }) => await ServiceR.createService(data, authUser)),
-        updateService: compose(requiresAuth)(
-            async (root, data, { authUser }) => await ServiceR.updateService(data, authUser)),
+        createTreatment: compose(requiresAuth)(
+            async (root, data, { authUser }) => await TreatmentR.createTreatment(data, authUser)),
+        updateTreatment: compose(requiresAuth)(
+            async (root, data, { authUser }) => await TreatmentR.updateTreatment(data, authUser)),
         createTimetable: compose(requiresAuth)(
             async (root, data, { authUser }) => await TimetableR.createTimetable(data, authUser)),
         updateTimetable: compose(requiresAuth)(
