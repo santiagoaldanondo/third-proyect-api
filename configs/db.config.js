@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const dbUri = process.env.DB_MONGO_URI
+const dbUri = process.env.MONGODB_URI
 
 mongoose.connect(dbUri, { useMongoClient: true });
 mongoose.Promise = Promise;
