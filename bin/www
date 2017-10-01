@@ -31,9 +31,9 @@ app.set('port', port);
 server.listen(port, () => {
   SubscriptionServer.create(
     { execute, subscribe, schema },
-    { server, path: '/subscriptions' },
+    { server, path: '/subscriptions' }
   );
-  console.log(`Hackernews GraphQL server running on port ${port}.`)
+  console.log(`GraphQL server running on port ${port}.`)
 });
 server.on('error', onError);
 server.on('listening', onListening);
