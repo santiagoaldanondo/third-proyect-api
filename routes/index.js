@@ -9,7 +9,7 @@ const formatError = require('./../formatError');
 const mongo = require('./../configs/db.config')
 const JWT_SECRET = process.env.JWT_SECRET
 
-const buildOptions = async (req, res) => {
+const buildOptions = (req, res) => {
     // const user = await authenticate(req, mongo.Users);
     return {
         context: {
