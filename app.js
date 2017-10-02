@@ -26,10 +26,6 @@ app.use(authorization)
 
 app.use('/', routes)
 
-app.get('*', function (req, res) {
-  res.sendfile('./dist/index.html'); // allows properly routing for Angular 
-});
-
 app.use((req, res, next) => {
   const err = new Error('Not Found')
   err.status = 404

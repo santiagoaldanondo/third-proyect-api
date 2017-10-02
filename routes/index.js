@@ -29,4 +29,9 @@ router.use('/graphiql', graphiqlExpress({
     subscriptionsEndpoint: `ws://localhost:${port}/subscriptions`,
 }));
 
+
+router.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname + '/dist/index.html'));
+});
+
 module.exports = router;
