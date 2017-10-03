@@ -71,7 +71,7 @@ const resolvers = {
     Mutation: {
         register: async (root, data, { JWT_SECRET }) => await UserR.register(data, JWT_SECRET),
         login: async (root, data, { JWT_SECRET }) => await UserR.login(data, JWT_SECRET),
-        addToaccount: compose(requiresAuth)(
+        addToAccount: compose(requiresAuth)(
             async (root, data, { authUser }) => await UserR.addToAccount(data, authUser)),
         resetPassword: compose(requiresAuth)(
             async (root, data, { authUser }) => await UserR.resetPassword(data, authUser)),
