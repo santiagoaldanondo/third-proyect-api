@@ -12,6 +12,8 @@ const corsConfig = require('./configs/cors.config')
 
 const app = express()
 
+const apiPrefix = process.env.API_PREFIX
+
 app.use(cors(corsConfig))
 
 app.use(logger('dev'))
@@ -24,7 +26,7 @@ app.use(express.static(path.join(__dirname, "dist")));
 
 app.use(authorization)
 
-app.use('/', routes)
+app.use(`/${apiPrefix}`, routes)
 
 app.use((req, res, next) => {
   const err = new Error('Not Found')
