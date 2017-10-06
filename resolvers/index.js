@@ -74,9 +74,9 @@ const resolvers = {
         addToAccount: compose(requiresAuth)(
             async (root, data, { authAccount }) => await UserR.addToAccount(data, authAccount)),
         resetPassword: compose(requiresAuth)(
-            async (root, data, { authUser }) => await UserR.resetPassword(data, authUser)),
+            async (root, data, { authUser, JWT_SECRET }) => await UserR.resetPassword(data, authUser, JWT_SECRET)),
         updateUser: compose(requiresAuth)(
-            async (root, data, { authUser }) => await UserR.updateUser(data, authUser)),
+            async (root, data, { authUser, JWT_SECRET }) => await UserR.updateUser(data, authUser, JWT_SECRET)),
         createClient: compose(requiresAuth)(
             async (root, data, { authAccount }) => await ClientR.createClient(data, authAccount)),
         updateClient: compose(requiresAuth)(

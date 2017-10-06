@@ -69,20 +69,45 @@ module.exports.addToAccount = (data, authAccount) => {
     return User.create(data)
 }
 
-module.exports.resetPassword = async (data, authUser) => {
-    const dbUser = await User.findById(authUser._id)
-    const passwordOk = await dbUser.checkPassword(data.oldPassword)
+module.exports.resetPassword = async (data, authUser, JWT_SECRET) => {
+    console.log(data)
+    const user = await User.findById(authUser._id).populate("account")
+    const passwordOk = await user.checkPassword(data.oldPassword)
     if (!passwordOk) {
         throw new Error("Old password is not correct")
     } else {
-        dbUser.password = data.newPassword
-        return dbUser.save()
+        user.password = data.newPassword
+        user.save()
+        const token = jsonwebtoken.sign(
+            {
+                authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                authAccount: _.pick(user, ['account._id', 'account.description'])
+            },
+            JWT_SECRET
+            , {
+                expiresIn: '1d'
+            }
+        )
+        return token
+
     }
 }
 
-module.exports.updateUser = async (data, authUser) => {
+module.exports.updateUser = async (data, authUser, JWT_SECRET) => {
+    console.log(data)
     if (data._id === authUser._id) {
-        return User.findByIdAndUpdate(authUser._id, data, { new: true })
+        const user = await User.findByIdAndUpdate(authUser._id, data, { new: true }).populate("account")
+        const token = jsonwebtoken.sign(
+            {
+                authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                authAccount: _.pick(user, ['account._id', 'account.description'])
+            },
+            JWT_SECRET
+            , {
+                expiresIn: '1d'
+            }
+        )
+        return token
     }
     throw new Error("You cannot modify a different user")
 

@@ -25,7 +25,7 @@ const buildOptions = (req, res) => {
 
 router.use('/graphql', bodyParser.json(), graphqlExpress(buildOptions));
 router.use('/graphiql', graphiqlExpress({
-    endpointURL: '/graphql',
+    endpointURL: '/api/graphql',
     // passHeader: `'Authorization': 'bearer token-foo@bar.com'`,
     subscriptionsEndpoint: `ws://localhost:${port}/subscriptions`,
 }));

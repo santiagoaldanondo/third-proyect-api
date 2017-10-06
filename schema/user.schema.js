@@ -16,6 +16,6 @@ module.exports.mutation = `
         description: String!): String
     login(email: String!, password: String!): String
     addToAccount(firstName: String!, lastName: String! email: String!, password: String!): User
-    resetPassword(oldPassword: String!, newPassword: String!): User
-    updateUser(firstName: String!, lastName: String!, email: String!): User
+    resetPassword(oldPassword: String!, newPassword: String!): String
+    updateUser(_id: String!, firstName: String!, lastName: String!, email: String!): String
 `
