@@ -56,47 +56,47 @@ const resolvers = {
     },
     Query: {
         getClients: compose(requiresAuth)(
-            async (root, data, { authUser }) => await ClientR.getClients(authUser)),
+            async (root, data, { authAccount }) => await ClientR.getClients(authAccount)),
         getInsurances: compose(requiresAuth)(
-            async (root, data, { authUser }) => await InsuranceR.getInsurances(authUser)),
+            async (root, data, { authAccount }) => await InsuranceR.getInsurances(authAccount)),
         getTreatments: compose(requiresAuth)(
-            async (root, data, { authUser }) => await TreatmentR.getTreatments(authUser)),
+            async (root, data, { authAccount }) => await TreatmentR.getTreatments(authAccount)),
         getTimetables: compose(requiresAuth)(
-            async (root, data, { authUser }) => await TimetableR.getTimetables(authUser)),
+            async (root, data, { authAccount }) => await TimetableR.getTimetables(authAccount)),
         getPricings: compose(requiresAuth)(
-            async (root, data, { authUser }) => await PricingR.getPricings(authUser)),
+            async (root, data, { authAccount }) => await PricingR.getPricings(authAccount)),
         getUsers: compose(requiresAuth)(
-            async (root, data, { authUser }) => await UserR.getUsers(authUser))
+            async (root, data, { authAccount }) => await UserR.getUsers(authAccount))
     },
     Mutation: {
         register: async (root, data, { JWT_SECRET }) => await UserR.register(data, JWT_SECRET),
         login: async (root, data, { JWT_SECRET }) => await UserR.login(data, JWT_SECRET),
         addToAccount: compose(requiresAuth)(
-            async (root, data, { authUser }) => await UserR.addToAccount(data, authUser)),
+            async (root, data, { authAccount }) => await UserR.addToAccount(data, authAccount)),
         resetPassword: compose(requiresAuth)(
             async (root, data, { authUser }) => await UserR.resetPassword(data, authUser)),
         updateUser: compose(requiresAuth)(
             async (root, data, { authUser }) => await UserR.updateUser(data, authUser)),
         createClient: compose(requiresAuth)(
-            async (root, data, { authUser }) => await ClientR.createClient(data, authUser)),
+            async (root, data, { authAccount }) => await ClientR.createClient(data, authAccount)),
         updateClient: compose(requiresAuth)(
-            async (root, data, { authUser }) => await ClientR.updateClient(data, authUser)),
+            async (root, data, { authAccount }) => await ClientR.updateClient(data, authAccount)),
         createInsurance: compose(requiresAuth)(
-            async (root, data, { authUser }) => await InsuranceR.createInsurance(data, authUser)),
+            async (root, data, { authAccount }) => await InsuranceR.createInsurance(data, authAccount)),
         updateInsurance: compose(requiresAuth)(
-            async (root, data, { authUser }) => await InsuranceR.updateInsurance(data, authUser)),
+            async (root, data, { authAccount }) => await InsuranceR.updateInsurance(data, authAccount)),
         createTreatment: compose(requiresAuth)(
-            async (root, data, { authUser }) => await TreatmentR.createTreatment(data, authUser)),
+            async (root, data, { authAccount }) => await TreatmentR.createTreatment(data, authAccount)),
         updateTreatment: compose(requiresAuth)(
-            async (root, data, { authUser }) => await TreatmentR.updateTreatment(data, authUser)),
+            async (root, data, { authAccount }) => await TreatmentR.updateTreatment(data, authAccount)),
         createTimetable: compose(requiresAuth)(
-            async (root, data, { authUser }) => await TimetableR.createTimetable(data, authUser)),
+            async (root, data, { authAccount }) => await TimetableR.createTimetable(data, authAccount)),
         updateTimetable: compose(requiresAuth)(
-            async (root, data, { authUser }) => await TimetableR.updateTimetable(data, authUser)),
+            async (root, data, { authAccount }) => await TimetableR.updateTimetable(data, authAccount)),
         createPricing: compose(requiresAuth)(
-            async (root, data, { authUser }) => await PricingR.createPricing(data, authUser)),
+            async (root, data, { authAccount }) => await PricingR.createPricing(data, authAccount)),
         updatePricing: compose(requiresAuth)(
-            async (root, data, { authUser }) => await PricingR.updatePricing(data, authUser)),
+            async (root, data, { authAccount }) => await PricingR.updatePricing(data, authAccount)),
     },
 };
 

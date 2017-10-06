@@ -14,7 +14,8 @@ const buildOptions = (req, res) => {
     return {
         context: {
             JWT_SECRET,
-            authUser: req.authUser
+            authUser: req.authUser,
+            authAccount: req.authAccount,
             // dataloaders: buildDataloaders(),
         }, // This context object is passed to all resolvers.
         formatError,

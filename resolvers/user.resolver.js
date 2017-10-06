@@ -12,8 +12,8 @@ module.exports.user = (user) => {
     return User.findById(user)
 }
 
-module.exports.getUsers = (authUser) => {
-    return User.find({ account: authUser.account })
+module.exports.getUsers = (authAccount) => {
+    return User.find({ account: authAccount._id })
 }
 
 module.exports.register = async (data, JWT_SECRET) => {
@@ -23,10 +23,12 @@ module.exports.register = async (data, JWT_SECRET) => {
     const newAccount = await Account.create(_.pick(data, ['description', 'owner']))
     newUser.account = newAccount._id
     await User.findByIdAndUpdate(newUser._id, newUser, { new: true })
+        .populate("account")
         .then(user => {
             token = jsonwebtoken.sign(
                 {
-                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'account'])
+                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                    authAccount: _.pick(user, ['account._id', 'account.description'])
                 },
                 JWT_SECRET
                 , {
@@ -39,7 +41,7 @@ module.exports.register = async (data, JWT_SECRET) => {
 
 module.exports.login = async (data, JWT_SECRET) => {
     let user = new User
-    user = await User.findOne({ email: data.email })
+    user = await User.findOne({ email: data.email }).populate("account")
     if (!user) {
         throw new Error("Email or password are not correct")
     } else {
@@ -49,7 +51,8 @@ module.exports.login = async (data, JWT_SECRET) => {
         } else {
             const token = jsonwebtoken.sign(
                 {
-                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'account'])
+                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                    authAccount: _.pick(user, ['account._id', 'account.description'])
                 },
                 JWT_SECRET
                 , {
@@ -61,8 +64,8 @@ module.exports.login = async (data, JWT_SECRET) => {
     }
 }
 
-module.exports.addToAccount = (data, authUser) => {
-    data.account = authUser.account
+module.exports.addToAccount = (data, authAccount) => {
+    data.account = authAccount._id
     return User.create(data)
 }
 
@@ -80,7 +83,7 @@ module.exports.resetPassword = async (data, authUser) => {
 module.exports.updateUser = async (data, authUser) => {
     if (data._id === authUser._id) {
         return User.findByIdAndUpdate(authUser._id, data, { new: true })
-        }
+    }
     throw new Error("You cannot modify a different user")
 
 }

@@ -5,17 +5,17 @@ module.exports.treatment = (treatment) => {
     return Treatment.findById(treatment)
 }
 
-module.exports.getTreatments = (authUser) => {
-    return Treatment.find({ account: authUser.account })
+module.exports.getTreatments = (authAccount) => {
+    return Treatment.find({ account: authAccount._id })
 }
 
-module.exports.createTreatment = (data, authUser) => {
-    data.account = authUser.account
+module.exports.createTreatment = (data, authAccount) => {
+    data.account = authAccount._id
     return Treatment.create(data)
 }
 
-module.exports.updateTreatment = (data, authUser) => {
-    data.account = authUser.account
+module.exports.updateTreatment = (data, authAccount) => {
+    data.account = authAccount._id
     return Treatment.findByIdAndUpdate(data._id, data, { new: true })
 }
 
