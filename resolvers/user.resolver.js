@@ -28,7 +28,7 @@ module.exports.register = async (data, JWT_SECRET) => {
             token = jsonwebtoken.sign(
                 {
                     authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
-                    authAccount: _.pick(user, ['account._id', 'account.description'])
+                    authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
                 },
                 JWT_SECRET
                 , {
@@ -52,7 +52,7 @@ module.exports.login = async (data, JWT_SECRET) => {
             const token = jsonwebtoken.sign(
                 {
                     authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
-                    authAccount: _.pick(user, ['account._id', 'account.description'])
+                    authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
                 },
                 JWT_SECRET
                 , {
@@ -81,7 +81,7 @@ module.exports.resetPassword = async (data, authUser, JWT_SECRET) => {
         const token = jsonwebtoken.sign(
             {
                 authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
-                authAccount: _.pick(user, ['account._id', 'account.description'])
+                authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
             },
             JWT_SECRET
             , {
@@ -100,7 +100,7 @@ module.exports.updateUser = async (data, authUser, JWT_SECRET) => {
         const token = jsonwebtoken.sign(
             {
                 authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
-                authAccount: _.pick(user, ['account._id', 'account.description'])
+                authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
             },
             JWT_SECRET
             , {

@@ -7,6 +7,15 @@ const requiresAuth =
             throw new Error('User is not authenticated');
         };
 
+const requiresAdmin =
+    (fn) =>
+        (root, args, context) => {
+            if (context.authUser._id === context.authAccount.owner) {
+                return fn(root, args, context);
+            }
+            throw new Error('User is not admin');
+        };
+
 // const createResolver = (resolver) => {
 //     const baseResolver = resolver
 //     baseResolver.createResolver = (childResolver) => {
