@@ -18,7 +18,8 @@ module.exports.getUsers = (authAccount) => {
 
 module.exports.register = async (data, JWT_SECRET) => {
     let token = null
-    const newUser = await User.create(_.pick(data, ['firstName', 'lastName', 'email', 'password']))
+    data.isAdmin = true
+    const newUser = await User.create(_.pick(data, ['firstName', 'lastName', 'email', 'password', "isAdmin"]))
     data.owner = newUser._id
     const newAccount = await Account.create(_.pick(data, ['description', 'owner']))
     newUser.account = newAccount._id
@@ -27,7 +28,7 @@ module.exports.register = async (data, JWT_SECRET) => {
         .then(user => {
             token = jsonwebtoken.sign(
                 {
-                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'isAdmin']),
                     authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
                 },
                 JWT_SECRET
@@ -51,7 +52,7 @@ module.exports.login = async (data, JWT_SECRET) => {
         } else {
             const token = jsonwebtoken.sign(
                 {
-                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                    authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'isAdmin']),
                     authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
                 },
                 JWT_SECRET
@@ -80,7 +81,7 @@ module.exports.resetPassword = async (data, authUser, JWT_SECRET) => {
         user.save()
         const token = jsonwebtoken.sign(
             {
-                authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'isAdmin']),
                 authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
             },
             JWT_SECRET
@@ -94,12 +95,11 @@ module.exports.resetPassword = async (data, authUser, JWT_SECRET) => {
 }
 
 module.exports.updateUser = async (data, authUser, JWT_SECRET) => {
-    console.log(data)
     if (data._id === authUser._id) {
         const user = await User.findByIdAndUpdate(authUser._id, data, { new: true }).populate("account")
         const token = jsonwebtoken.sign(
             {
-                authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email']),
+                authUser: _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'isAdmin']),
                 authAccount: _.pick(user, ['account._id', 'account.description', 'account.owner'])
             },
             JWT_SECRET

@@ -26,6 +26,10 @@ const UserSchema = Schema({
     account: {
         type: Schema.Types.ObjectId,
         ref: "Account"
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 }, {
         timestamps: true

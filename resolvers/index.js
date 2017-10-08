@@ -8,7 +8,7 @@ const PricingR = require('./pricing.resolver')
 const TreatmentR = require('./treatment.resolver')
 const TimetableR = require('./timetable.resolver')
 const UserR = require('./user.resolver')
-const requiresAuth = require('./../auth/permissions')
+const { requiresAuth, requiresAdmin } = require('./../auth/permissions')
 
 const prepare = (object) => {
     object._id = object._id.toString()
@@ -57,45 +57,45 @@ const resolvers = {
     Query: {
         getClients: compose(requiresAuth)(
             async (root, data, { authAccount }) => await ClientR.getClients(authAccount)),
-        getInsurances: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await InsuranceR.getInsurances(authAccount)),
-        getTreatments: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await TreatmentR.getTreatments(authAccount)),
         getTimetables: compose(requiresAuth)(
             async (root, data, { authAccount }) => await TimetableR.getTimetables(authAccount)),
-        getPricings: compose(requiresAuth)(
+        getInsurances: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authAccount }) => await InsuranceR.getInsurances(authAccount)),
+        getTreatments: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authAccount }) => await TreatmentR.getTreatments(authAccount)),
+        getPricings: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await PricingR.getPricings(authAccount)),
-        getUsers: compose(requiresAuth)(
+        getUsers: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await UserR.getUsers(authAccount))
     },
     Mutation: {
         register: async (root, data, { JWT_SECRET }) => await UserR.register(data, JWT_SECRET),
         login: async (root, data, { JWT_SECRET }) => await UserR.login(data, JWT_SECRET),
-        addToAccount: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await UserR.addToAccount(data, authAccount)),
         resetPassword: compose(requiresAuth)(
             async (root, data, { authUser, JWT_SECRET }) => await UserR.resetPassword(data, authUser, JWT_SECRET)),
-        updateUser: compose(requiresAuth)(
-            async (root, data, { authUser, JWT_SECRET }) => await UserR.updateUser(data, authUser, JWT_SECRET)),
         createClient: compose(requiresAuth)(
             async (root, data, { authAccount }) => await ClientR.createClient(data, authAccount)),
         updateClient: compose(requiresAuth)(
             async (root, data, { authAccount }) => await ClientR.updateClient(data, authAccount)),
-        createInsurance: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await InsuranceR.createInsurance(data, authAccount)),
-        updateInsurance: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await InsuranceR.updateInsurance(data, authAccount)),
-        createTreatment: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await TreatmentR.createTreatment(data, authAccount)),
-        updateTreatment: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await TreatmentR.updateTreatment(data, authAccount)),
-        createTimetable: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await TimetableR.createTimetable(data, authAccount)),
         updateTimetable: compose(requiresAuth)(
             async (root, data, { authAccount }) => await TimetableR.updateTimetable(data, authAccount)),
-        createPricing: compose(requiresAuth)(
+        createTimetable: compose(requiresAuth)(
+            async (root, data, { authAccount }) => await TimetableR.createTimetable(data, authAccount)),
+        addToAccount: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authAccount }) => await UserR.addToAccount(data, authAccount)),
+        updateUser: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authUser, JWT_SECRET }) => await UserR.updateUser(data, authUser, JWT_SECRET)),
+        createInsurance: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authAccount }) => await InsuranceR.createInsurance(data, authAccount)),
+        updateInsurance: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authAccount }) => await InsuranceR.updateInsurance(data, authAccount)),
+        createTreatment: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authAccount }) => await TreatmentR.createTreatment(data, authAccount)),
+        updateTreatment: compose(requiresAuth, requiresAdmin)(
+            async (root, data, { authAccount }) => await TreatmentR.updateTreatment(data, authAccount)),
+        createPricing: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await PricingR.createPricing(data, authAccount)),
-        updatePricing: compose(requiresAuth)(
+        updatePricing: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await PricingR.updatePricing(data, authAccount)),
     },
 };
