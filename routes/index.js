@@ -27,12 +27,11 @@ router.use('/graphql', bodyParser.json(), graphqlExpress(buildOptions));
 router.use('/graphiql', graphiqlExpress({
     endpointURL: '/api/graphql',
     // passHeader: `'Authorization': 'bearer token-foo@bar.com'`,
-    subscriptionsEndpoint: `ws://localhost:${port}/subscriptions`,
+    subscriptionsEndpoint: `ws://localhost:3000/api/subscriptions`,
 }));
 
-
-router.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname + '/dist/index.html'));
-});
+// router.get('/*', function (req, res) {
+//     res.sendFile(path.join(__dirname + '/dist/index.html'));
+// });
 
 module.exports = router;

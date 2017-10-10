@@ -12,6 +12,10 @@ const { SubscriptionServer } = require('subscriptions-transport-ws');
 const { execute, subscribe } = require('graphql');
 const schema = require('./../schema');
 
+const { PubSub } = require('graphql-subscriptions');
+
+export const pubsub = new PubSub();
+
 /**
  * Create HTTP server.
  */
@@ -29,9 +33,8 @@ app.set('port', port);
  */
 
 server.listen(port, () => {
-  SubscriptionServer.create(
-    { execute, subscribe, schema },
-    { server, path: '/subscriptions' }
+  new SubscriptionServer({ execute, subscribe, schema },
+    { server: server, path: '/api/subscriptions' }
   );
   console.log(`GraphQL server running on port ${port}.`)
 });
