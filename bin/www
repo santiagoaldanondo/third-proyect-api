@@ -12,9 +12,9 @@ const { SubscriptionServer } = require('subscriptions-transport-ws');
 const { execute, subscribe } = require('graphql');
 const schema = require('./../schema');
 
-const { PubSub } = require('graphql-subscriptions');
+// const { PubSub } = require('graphql-subscriptions');
 
-export const pubsub = new PubSub();
+// export const pubsub = new PubSub();
 
 /**
  * Create HTTP server.
