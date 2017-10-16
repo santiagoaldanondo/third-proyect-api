@@ -10,6 +10,9 @@ const TimetableR = require('./timetable.resolver')
 const UserR = require('./user.resolver')
 const { requiresAuth, requiresAdmin } = require('./../auth/permissions')
 
+const { PubSub } = require('graphql-subscriptions');
+const pubsub = new PubSub()
+
 const prepare = (object) => {
     object._id = object._id.toString()
     return object
@@ -86,7 +89,11 @@ const resolvers = {
         updateUser: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authUser, JWT_SECRET }) => await UserR.updateUser(data, authUser, JWT_SECRET)),
         createInsurance: compose(requiresAuth, requiresAdmin)(
-            async (root, data, { authAccount }) => await InsuranceR.createInsurance(data, authAccount)),
+            async (root, data, { authAccount }) => {
+                const insuranceAdded = await InsuranceR.createInsurance(data, authAccount)
+                pubsub.publish("INSURANCE_ADDED", { insuranceAdded });
+                return insuranceAdded
+            }),
         updateInsurance: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await InsuranceR.updateInsurance(data, authAccount)),
         createTreatment: compose(requiresAuth, requiresAdmin)(
@@ -97,6 +104,11 @@ const resolvers = {
             async (root, data, { authAccount }) => await PricingR.createPricing(data, authAccount)),
         updatePricing: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await PricingR.updatePricing(data, authAccount)),
+    },
+    Subscription: {
+        insuranceAdded: {
+            subscribe: () => pubsub.asyncIterator('INSURANCE_ADDED'),
+        },
     },
 };
 

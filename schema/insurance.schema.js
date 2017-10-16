@@ -13,3 +13,6 @@ module.exports.mutation = `
     createInsurance(name: String!): Insurance
     updateInsurance(_id: ID!, name: String!): Insurance
 `
+module.exports.subscription = `
+    insuranceAdded: Insurance
+`

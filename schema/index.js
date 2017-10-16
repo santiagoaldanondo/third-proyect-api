@@ -34,6 +34,9 @@ type Mutation {
   ${pricingSchema.mutation}
   ${timetableSchema.mutation} 
 }
+type Subscription {
+  ${insuranceSchema.subscription}   
+}
 `;
 
 const executableSchema = graphqlTools.makeExecutableSchema({
