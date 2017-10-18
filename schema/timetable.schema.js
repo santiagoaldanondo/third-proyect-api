@@ -20,3 +20,7 @@ module.exports.mutation = `
     updateTimetable(_id: ID!, date: Date!, notes: String, info: String, client: ID,
         treatment: ID, user: ID): Timetable
 `
+module.exports.subscription = `
+    timetableAdded: Timetable
+`
+

@@ -13,10 +13,9 @@ const { requiresAuth, requiresAdmin } = require('./../auth/permissions')
 const { PubSub } = require('graphql-subscriptions');
 const pubsub = new PubSub()
 
-const prepare = (object) => {
-    object._id = object._id.toString()
-    return object
-}
+const INSURANCE_ADDED = 'INSURANCE_ADDED'
+const TIMETABLE_ADDED = 'TIMETABLE_ADDED'
+const CLIENT_ADDED = 'CLIENT_ADDED'
 
 const resolvers = {
     Date: {
@@ -77,13 +76,21 @@ const resolvers = {
         resetPassword: compose(requiresAuth)(
             async (root, data, { authUser, JWT_SECRET }) => await UserR.resetPassword(data, authUser, JWT_SECRET)),
         createClient: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await ClientR.createClient(data, authAccount)),
+            async (root, data, { authAccount }) => {
+                const clientAdded = await ClientR.createClient(data, authAccount)
+                pubsub.publish(CLIENT_ADDED, { clientAdded });
+                return clientAdded
+            }),
         updateClient: compose(requiresAuth)(
             async (root, data, { authAccount }) => await ClientR.updateClient(data, authAccount)),
         updateTimetable: compose(requiresAuth)(
             async (root, data, { authAccount }) => await TimetableR.updateTimetable(data, authAccount)),
         createTimetable: compose(requiresAuth)(
-            async (root, data, { authAccount }) => await TimetableR.createTimetable(data, authAccount)),
+            async (root, data, { authAccount }) => {
+                const timetableAdded = await TimetableR.createTimetable(data, authAccount)
+                pubsub.publish(TIMETABLE_ADDED, { timetableAdded });
+                return timetableAdded
+            }),
         addToAccount: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await UserR.addToAccount(data, authAccount)),
         updateUser: compose(requiresAuth, requiresAdmin)(
@@ -91,7 +98,7 @@ const resolvers = {
         createInsurance: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => {
                 const insuranceAdded = await InsuranceR.createInsurance(data, authAccount)
-                pubsub.publish("INSURANCE_ADDED", { insuranceAdded });
+                pubsub.publish(INSURANCE_ADDED, { insuranceAdded });
                 return insuranceAdded
             }),
         updateInsurance: compose(requiresAuth, requiresAdmin)(
@@ -107,7 +114,13 @@ const resolvers = {
     },
     Subscription: {
         insuranceAdded: {
-            subscribe: () => pubsub.asyncIterator('INSURANCE_ADDED'),
+            subscribe: () => pubsub.asyncIterator(INSURANCE_ADDED),
+        },
+        timetableAdded: {
+            subscribe: () => pubsub.asyncIterator(TIMETABLE_ADDED),
+        },
+        clientAdded: {
+            subscribe: () => pubsub.asyncIterator(CLIENT_ADDED),
         },
     },
 };

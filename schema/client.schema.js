@@ -20,3 +20,6 @@ module.exports.mutation = `
     updateClient(_id: ID!, firstName: String!, lastName: String!, email: String,
         phone: String!, insuranceNumber: String, insurance: ID!): Client
 `
+module.exports.subscription = `
+    clientAdded: Client
+`
