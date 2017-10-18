@@ -35,7 +35,6 @@ type Mutation {
   ${timetableSchema.mutation} 
 }
 type Subscription {
-  ${insuranceSchema.subscription}   
   ${timetableSchema.subscription} 
   ${clientSchema.subscription}   
 }

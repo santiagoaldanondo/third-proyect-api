@@ -96,11 +96,7 @@ const resolvers = {
         updateUser: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authUser, JWT_SECRET }) => await UserR.updateUser(data, authUser, JWT_SECRET)),
         createInsurance: compose(requiresAuth, requiresAdmin)(
-            async (root, data, { authAccount }) => {
-                const insuranceAdded = await InsuranceR.createInsurance(data, authAccount)
-                pubsub.publish(INSURANCE_ADDED, { insuranceAdded });
-                return insuranceAdded
-            }),
+            async (root, data, { authAccount }) => await InsuranceR.createInsurance(data, authAccount)),
         updateInsurance: compose(requiresAuth, requiresAdmin)(
             async (root, data, { authAccount }) => await InsuranceR.updateInsurance(data, authAccount)),
         createTreatment: compose(requiresAuth, requiresAdmin)(
@@ -113,9 +109,6 @@ const resolvers = {
             async (root, data, { authAccount }) => await PricingR.updatePricing(data, authAccount)),
     },
     Subscription: {
-        insuranceAdded: {
-            subscribe: () => pubsub.asyncIterator(INSURANCE_ADDED),
-        },
         timetableAdded: {
             subscribe: () => pubsub.asyncIterator(TIMETABLE_ADDED),
         },
