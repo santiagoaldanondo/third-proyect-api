@@ -4,20 +4,21 @@ const bodyParser = require('body-parser')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const port = require('./../configs/port.config')
 const schema = require('./../schema')
-// const buildDataloaders = require('./../dataloaders');
+const dataloaders = require('./../dataloaders');
 const formatError = require('./../formatError');
 const mongo = require('./../configs/db.config')
 const JWT_SECRET = process.env.JWT_SECRET
 
+console.log(dataloaders)
+
 const buildOptions = (req, res) => {
-    // const user = await authenticate(req, mongo.Users);
     return {
         context: {
             JWT_SECRET,
             authUser: req.authUser,
             authAccount: req.authAccount,
-            // dataloaders: buildDataloaders(),
-        }, // This context object is passed to all resolvers.
+            dataloaders: dataloaders,
+        },
         formatError,
         schema,
     };
@@ -26,12 +27,7 @@ const buildOptions = (req, res) => {
 router.use('/graphql', bodyParser.json(), graphqlExpress(buildOptions));
 router.use('/graphiql', graphiqlExpress({
     endpointURL: '/api/graphql',
-    // passHeader: `'Authorization': 'bearer token-foo@bar.com'`,
     subscriptionsEndpoint: `ws://localhost:3000/api/subscriptions`,
 }));
-
-// router.get('/*', function (req, res) {
-//     res.sendFile(path.join(__dirname + '/dist/index.html'));
-// });
 
 module.exports = router;

@@ -13,7 +13,6 @@ const { requiresAuth, requiresAdmin } = require('./../auth/permissions')
 const { PubSub } = require('graphql-subscriptions');
 const pubsub = new PubSub()
 
-const INSURANCE_ADDED = 'INSURANCE_ADDED'
 const TIMETABLE_ADDED = 'TIMETABLE_ADDED'
 const CLIENT_ADDED = 'CLIENT_ADDED'
 
@@ -30,28 +29,34 @@ const resolvers = {
         }
     },
     Account: {
-        owner: async ({ owner }) => await UserR.owner(owner)
+        owner: async ({ owner }, data, { dataloaders }) => await dataloaders.userLoader.load(owner)
     },
     Client: {
         account: async ({ account }) => await AccountR.account(account),
-        insurance: async ({ insurance }) => await InsuranceR.insurance(insurance)
+        insurance: async ({ insurance }, data, { dataloaders }) => await dataloaders.insuranceLoader.load(insurance)
     },
     Insurance: {
         account: async ({ account }) => await AccountR.account(account)
     },
     Pricing: {
         account: async ({ account }) => await AccountR.account(account),
-        insurance: async ({ insurance }) => await InsuranceR.insurance(insurance),
-        treatment: async ({ treatment }) => await TreatmentR.treatment(treatment)
+        insurance: async ({ insurance }, data, { dataloaders }) => await dataloaders.insuranceLoader.load(insurance),
+        treatment: async ({ treatment }, data, { dataloaders }) => await dataloaders.treatmentLoader.load(treatment)
     },
     Treatment: {
         account: async ({ account }) => await AccountR.account(account)
     },
     Timetable: {
         account: async ({ account }) => await AccountR.account(account),
-        treatment: async ({ treatment }) => await TreatmentR.treatment(treatment),
-        client: async ({ client }) => await ClientR.client(client),
-        user: async ({ user }) => await UserR.user(user)
+        treatment: async ({ treatment }, data, { dataloaders }) => {
+            return treatment ? await dataloaders.treatmentLoader.load(treatment) : undefined // dataloader does not accept undefined
+        },
+        client: async ({ client }, data, { dataloaders }) => {
+            return client ? await dataloaders.clientLoader.load(client) : undefined // dataloader does not accept undefined
+        },
+        user: async ({ user }, data, { dataloaders }) => {
+            return user ? await dataloaders.userLoader.load(user) : undefined // dataloader does not accept undefined
+        }
     },
     User: {
         account: async ({ account }) => await AccountR.account(account)
